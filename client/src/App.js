@@ -14,7 +14,8 @@ import { getCart } from "./components/redux/actions/cart";
 import { getProfile, getProfiles } from "./components/redux/actions/profile";
 
 // axios
-axios.defaults.baseURL = "http://localhost:5000";
+const port = process.env.PORT;
+axios.defaults.baseURL = "https://agile-wave-00269.herokuapp.com:" + port;
 
 //  Setting common token for axios
 // localStorage ? localStorage.token && setAuthToken(localStorage.token) : localStorage.adminToken && setAdminAuthToken(localStorage.adminToken);
