@@ -199,7 +199,7 @@ router.put("/post/like/:prd_id", auth, async (req, res) => {
       const index = product.likes.indexOf(liked);
       product.likes.splice(index, 1);
       await product.save();
-      return res.json("Like Removed");
+      return res.json("Unliked 👎");
     }
     const user = await User.findById(req.user.id).select("-password");
     user &&
@@ -209,7 +209,7 @@ router.put("/post/like/:prd_id", auth, async (req, res) => {
       });
     product.likes && product.likes.push(liked);
     await product.save();
-    res.json("You Liked This Product!");
+    res.json("Liked 👍");
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");
@@ -237,7 +237,7 @@ router.put("/post/comment/:prd_id", [check("description").not().isEmpty().withMe
     };
     product.comments && product.comments.unshift(comment);
     await product.save();
-    res.json("Comment Posted");
+    res.json("Commented 👍");
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");
@@ -258,7 +258,7 @@ router.delete("/post/comment/:prd_id/:comment_id", auth, async (req, res) => {
       const index = product.comments.indexOf(isExist);
       product.comments.splice(index, 1);
       await product.save();
-      return res.json("Your Comment Deleted");
+      return res.json("Comment Deleted 👎");
     }
     res.json("Something went wrong!");
   } catch (error) {
@@ -274,7 +274,7 @@ router.delete("/:product_id", adminAuth, async (req, res) => {
   try {
     // removing a product
     await Product.findOneAndRemove({ _id: req.params.product_id });
-    res.json({ msg: "Product deleted successfully" });
+    res.json({ msg: "Product Deleted" });
   } catch (err) {
     console.log(err.message);
     res.status(500).send("Server Error");

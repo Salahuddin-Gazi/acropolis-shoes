@@ -114,7 +114,7 @@ export const addAddress = (addressBook) => async (dispatch) => {
       type: ADD_ADDRESS,
       payload: data,
     });
-    dispatch(setAlert("Contact added successfully", "success"));
+    dispatch(setAlert("Contact Added 👍", "success"));
   } catch (err) {
     if (err.response) {
       const errors = err.response.data.errors;
@@ -163,7 +163,7 @@ export const addOrder = (orderBook) => async (dispatch) => {
       type: ADD_ORDER,
       payload: data,
     });
-    dispatch(setAlert("Order added successfully", "success"));
+    dispatch(setAlert("Order Added 👍", "success"));
   } catch (err) {
     if (err.response) {
       const errors = err.response.data.errors;
@@ -193,7 +193,7 @@ export const addPayment = (paymentBook) => async (dispatch) => {
       type: ADD_PAYMENT,
       payload: data,
     });
-    dispatch(setAlert("Payment method added successfully", "success"));
+    dispatch(setAlert("Payment Method Added", "success"));
   } catch (err) {
     if (err.response) {
       const errors = err.response.data.errors;
@@ -218,7 +218,7 @@ export const deletePayment = (paymentId) => async (dispatch) => {
       type: DELETE_PAYMENT,
       payload: paymentId,
     });
-    dispatch(setAlert(data, "danger"));
+    dispatch(setAlert("Payment Method Deleted", "danger"));
   } catch (err) {
     err.response
       ? dispatch({
