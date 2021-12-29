@@ -38,6 +38,7 @@ export const getProducts = () => async (dispatch) => {
 
 // Get product by id
 export const getProduct = (product_id) => async (dispatch) => {
+  dispatch({ type: PRODUCT_LOADING });
   try {
     const { data } = await axios.get(`/api/product/${product_id}`);
     dispatch({ type: CLEAR_PRODUCT });
