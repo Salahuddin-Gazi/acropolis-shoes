@@ -127,7 +127,7 @@ export const deleteProduct = (product_id) => async (dispatch) => {
 // Update Product Likes
 export const updateLike = (id) => async (dispatch) => {
   try {
-    const { data } = await axios.put(`http://localhost:5000/api/product/post/like/${id}`);
+    const { data } = await axios.put(`/api/product/post/like/${id}`);
     dispatch(getProduct(id));
     dispatch({ type: UPDATE_LIKE });
     dispatch(setAlert(data, "success"));
@@ -148,7 +148,7 @@ export const addComment = (prd_id, description) => async (dispatch) => {
         "Content-type": "application/json",
       },
     });
-    const { data } = await api.put(`http://localhost:5000/api/product/post/comment/${prd_id}`, description);
+    const { data } = await api.put(`/api/product/post/comment/${prd_id}`, description);
     dispatch(getProduct(prd_id));
     dispatch({ type: ADD_COMMENT });
     dispatch(setAlert(data, "success"));
@@ -164,7 +164,7 @@ export const addComment = (prd_id, description) => async (dispatch) => {
 export const deleteComment = (prd_id, cmnt_id) => async (dispatch) => {
   dispatch({ type: COMMENT_LOADING });
   try {
-    const { data } = await axios.delete(`http://localhost:5000/api/product/post/comment/${prd_id}/${cmnt_id}`);
+    const { data } = await axios.delete(`/api/product/post/comment/${prd_id}/${cmnt_id}`);
     dispatch(getProduct(prd_id));
     dispatch({ type: DELETE_COMMENT });
     dispatch(setAlert(data, "danger"));
