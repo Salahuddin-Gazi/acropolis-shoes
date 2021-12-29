@@ -1,0 +1,47 @@
+.quantityBtn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.cart-content {
+  background: rgba(194, 177, 177, 0.664);
+}
+
+/* .order-body {
+  background: rgba(255, 255, 255, 0.185);
+} */
+
+/* @media only screen and (max-width: 900px) {
+  .cartDrawer {
+    width: 500px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .cartDrawer {
+    width: 300px;
+  }
+  .itemPrice {
+    color: red;
+  }
+} */
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (max-width: 600px) {
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+}
+
+.cardAvatarImg {
+  background: rgba(246, 0, 0, 0.89);
+}
+
+.cardAvatarImg:hover {
+  opacity: 0.4;
+}

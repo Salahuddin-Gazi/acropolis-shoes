@@ -1,0 +1,165 @@
+// @route  Post api/profile
+// @desc   Create or update user profile
+// @access Private
+router.post("/", auth, check("status").not().isEmpty().withMessage("Status is required"), async (req, res) => {
+  // Checking with the required // checking errors
+  const errors = validationResult(req);
+  // Check if errors
+  if (!errors.isEmpty()) {
+    return res.status("400").json({ errors: errors.array() });
+  }
+
+  try {
+    // Extract the required variables for the profile
+    const { status } = req.body;
+
+    // Build pofile object
+    const profileFields = {
+      status: "",
+    };
+    profileFields.user = req.user.id;
+    status && (profileFields.status = status);
+
+    // check for an existing profile
+    let profile = await Profile.findOne({ user: req.user.id });
+    if (profile) {
+      profile = await Profile.findOneAndUpdate({ user: req.user.id }, { $set: profileFields }, { new: true, upsert: true });
+      return res.json(profile);
+    }
+
+    // for new profile, we create
+    profile = new Profile(profileFields);
+    await profile.save();
+    res.json(profile);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+// const array = [
+//   ["Chris", "Boris", "Lean", "John"],
+//   ["Hena", "Lily", "Doe", "Hamil"],
+//   ["Taro", "Chuchu", "Lola", "Ben"],
+//   ["Sam", "Johny", "Peter", "Chao"],
+// ];
+
+// // Let's find Lola's index
+
+// for (var i= 0; i< array.length; i++){
+//   if(array[i][0] == "Lola") return
+// }
+
+// @route  Put api/product/:product_id
+// @desc   Update Product color, categories, image_urls
+// @access Private
+router.post(
+  "/:product_id",
+  adminAuth,
+  [
+    check("colors").not().isEmpty().withMessage("Please insert colors, in array"),
+    check("mainCategory").not().isEmpty().withMessage("Insert Top Category"),
+    check("subCategory").not().isEmpty().withMessage("Insert Sub Category"),
+    check("images").not().isEmpty().withMessage("Insert image urls"),
+  ],
+  async (req, res) => {
+    // Checking with the required // checking errors
+    const errors = validationResult(req);
+    // Check if errors
+    if (!errors.isEmpty()) {
+      return res.status("400").json({ errors: errors.array() });
+    }
+    // destructuring data from body
+    const { colors, mainCategory, subCategory, images } = req.body;
+
+    // Build newColors Array
+    // new color field
+    let newColors = [];
+    colors && typeof colors === "object" ? (newColors = colors) : (newColors = colors.split(",").map((color) => color.trim()));
+
+    //  making category field
+    // new category field
+    let newCategory = {
+      mainCategory: {},
+      subCategory: {},
+    };
+    mainCategory && (newCategory.mainCategory = mainCategory);
+    subCategory && (newCategory.subCategory = subCategory);
+
+    // making image field
+    //  new image url fields
+    let newImages = [];
+    images && typeof images === "object" ? (newImages = images) : (newImages = images.split(",").map((image) => image.trim()));
+    try {
+      const product = await Product.findOne({ id: req.params.product_id });
+      product.itemColors = newColors;
+      product.itemImages = newImages;
+      product.itemCategories = newCategory;
+      await product.save();
+      res.json(product);
+    } catch (err) {
+      console.log(err.message);
+      res.status(500).send("Server Error");
+    }
+  }
+);
+
+//  @route  PUT api/profile/address
+//  @desc   add address to profile
+//  @access Private
+router.put(
+  "/address",
+  auth,
+  [
+    check("city").not().isEmpty().withMessage("Please add a valid city to purachse"),
+    check("address").not().isEmpty().withMessage("Please add a valid address to purachse"),
+    check("phone").not().isEmpty().withMessage("Please add a phone number to purachse"),
+  ],
+  async (req, res) => {
+    // Checking with req // validating the inputs
+    const errors = validationResult(req);
+    // checking for errors
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    // Destructuring data from req
+    const { region, city, area, address, description, phone } = req.body;
+
+    // Making the new Experience object
+    const newAddress = { region: "", city: "", area: "", address: "", description: "", phone: "" };
+    region && (newAddress.region = region);
+    city && (newAddress.city = city);
+    area && (newAddress.area = area);
+    address && (newAddress.address = address);
+    description && (newAddress.description = description);
+    phone && (newAddress.phone = phone);
+
+    try {
+      const address = await Profile.findOne({ user: req.user.id });
+      address.addressBook.unshift(newAddress);
+      await address.save();
+      res.json(address);
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Server Error");
+    }
+  }
+);
+
+let obj = {
+  STATIONS: [
+    { stationName: "CBS", stationID: "8532885" },
+    { stationName: "NBC", stationID: "8533935" },
+    { stationName: "ABC", stationID: "8534048" },
+  ],
+};
+
+let searchName = "NBC";
+let update = { stationName: "BTV", stationID: "181" };
+
+// const search = obj.STATIONS.map((station) =>
+//   station.stationName === searchName ? station.findOne({searchName}) : null
+// );
+const search = obj.STATIONS.find((stat) => stat.stationName === searchName);
+console.log(search);

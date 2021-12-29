@@ -1,0 +1,238 @@
+// Login User
+export const login = (email, password) => async (dispatch) => {
+  const body = JSON.stringify({ email, password });
+  const api = axios.create({
+    headers: {
+      "Content-type": "application/json",
+    },
+  });
+  try {
+    const { data } = await api.post("/api/auth", body);
+    dispatch({
+      type: LOGIN_SUCCESS,
+      payload: data,
+    });
+    dispatch(loadUser());
+  } catch (err) {
+    const errors = err.response.data.errors;
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+    }
+    dispatch({
+      type: LOGIN_FAILURE,
+    });
+  }
+};
+
+import React, { Fragment, useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { connect } from "react-redux";
+import { getProduct } from "../redux/actions/product";
+import { Link } from "react-router-dom";
+import Spinner from "../Spinner/Spinner";
+import PropTypes from "prop-types";
+import "./Product.css";
+
+const Product = ({ auth: { admin, user, isAuthenticated, loading }, product: { product }, getProduct }) => {
+  const { prd_id } = useParams();
+  useEffect(() => {
+    getProduct(prd_id);
+  }, [getProduct, prd_id]);
+
+  const [cart, setCart] = useState({
+    color: "",
+    quantity: 1,
+  });
+
+  let { color, quantity } = cart;
+
+  const onChange = (e) => {
+    e.preventDefault();
+    setCart({ ...cart, [e.target.name]: e.target.value });
+  };
+  const imgClick = (e) => {
+    e.preventDefault();
+    return (
+      <div class="modal" tabindex="-1">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Modal title</h5>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <p>Modal body text goes here.</p>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                Close
+              </button>
+              <button type="button" className="btn btn-primary">
+                Save changes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+  return loading || product === null ? (
+    <Spinner />
+  ) : (
+    <Fragment>
+      <div>
+        {admin && admin._id && (
+          <p className="py-2 text-white">
+            Edit this product, *admin privilages only{"  "}
+            <Link to={`/editproduct/${prd_id}`} className="text-decoration-none">
+              <i className="fas fa-arrow-circle-right"></i> Edit The Product of :- {product.itemName}
+            </Link>
+          </p>
+        )}
+        <p className="py-2 text-white">
+          Back to products{"  "}
+          <Link to="/" className="text-decoration-none">
+            <i className="fas fa-arrow-circle-left"></i> Products
+          </Link>
+        </p>
+        <div className="row description-1">
+          <div className="col-md-6 card-1">
+            <div className="card card-body text-center card-product-img">
+              <img className="card-img embed-responsive-item cursor-pointer" src={product.itemImages.mainImage} alt="Preview" onClick={(e) => imgClick(e)} />
+              <div className="embed-responsive-item d-flex card-img2 cursor-pointer">
+                {product.itemImages.descriptionImages.length > 0 &&
+                  product.itemImages.descriptionImages.map((desImage, index) => (
+                    <img src={desImage} key={index} className="mx-2 my-2 p-2 bg-white" width="100px" height="100px" onClick={(e) => imgClick(e)} />
+                  ))}
+              </div>
+            </div>
+          </div>
+          <div className="col-md-6 card-2">
+            {" "}
+            <div className="card text-right card-product">
+              <div className="card-body">
+                <h5 className="card-title mb-3">{product.itemName}</h5>
+                {product.itemBrand === "" && product.itemBrand === "Unknown" ? (
+                  <h6 className="card-subtitle mb-2 text-muted text-danger">Brand Unknown</h6>
+                ) : (
+                  <h6 className="card-subtitle mb-2 text-muted">Brand {product.itemBrand}</h6>
+                )}
+                <p className="card-text text-muted">{product.itemDescription}</p>
+              </div>
+              <ul className="list-group list-group-flush card-text">
+                <li className="list-group-item">
+                  <div className="form-group">
+                    <select name="color" className={`form-control select-color fw-bold color-${color.toLowerCase()}`} onChange={(e) => onChange(e)}>
+                      <option value="">Select Available Color</option>
+                      {product.itemColors &&
+                        product.itemColors.map((color, index) => (
+                          <option value={color} key={index}>
+                            {color.toUpperCase()}
+                          </option>
+                        ))}
+                    </select>
+                    <small className="form-text">Give us an idea of where you are at in your career</small>
+                  </div>
+                </li>
+                <li className="list-group-item">
+                  Price <span className="itemPrice">${product.itemPrice}</span>
+                </li>
+                <li className="list-group-item">
+                  Product Status{" "}
+                  {product.status && product.status === "Upcoming" && (
+                    <span className="text-primary text-italic">
+                      <i className="fas fa-dot-circle"></i> Upcoming
+                    </span>
+                  )}
+                  {product.status && product.status === "Available" && (
+                    <span className="text-success text-italic">
+                      <i className="fas fa-dot-circle"></i> In Stock
+                    </span>
+                  )}
+                  {product.status && product.status !== "Upcoming" && product.status !== "Available" && (
+                    <span className="text-danger text-italic">
+                      <i className="fas fa-dot-circle"></i> Out of Stock
+                    </span>
+                  )}
+                </li>
+                <li className="list-group-item">
+                  Add Quantity
+                  <br />
+                  <div className="col-md-6 my-3">
+                    <div className="input-group mb-3">
+                      <button
+                        className="btn btn-outline-success icon-button"
+                        type="button"
+                        onClick={(e) => quantity < product.itemQuantity && setCart({ ...cart, quantity: cart.quantity + 1 })}
+                      >
+                        <i className="fas fa-plus"></i>
+                      </button>
+                      <input type="number" className="form-control text-center" name="quantity" value={quantity} disabled />
+                      <button
+                        className="btn btn-outline-danger icon-button"
+                        type="button"
+                        onClick={(e) => quantity > 1 && setCart({ ...cart, quantity: cart.quantity - 1 })}
+                      >
+                        <i className="fas fa-minus"></i>
+                      </button>
+                    </div>
+                  </div>
+                </li>
+                <li className="list-group-item">
+                  Total Cost <span className="itemPrice">${quantity * product.itemPrice}</span>
+                </li>
+              </ul>
+              {isAuthenticated && user ? (
+                <div className="shoe p-3 text-white text-center mt-3 cursor-pointer">
+                  <span className="text-uppercase">Add to cart</span>
+                </div>
+              ) : admin ? (
+                <div className="shoe-admin p-3 text-center mt-3 cursor-pointer">
+                  <span className="text-uppercase text-white">Admin Can't Buy!</span>
+                </div>
+              ) : (
+                <div className="shoe-login p-3 text-center mt-3 cursor-pointer">
+                  <Link to="/login">
+                    <span className="text-uppercase text-white">Log in to buy</span>
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </Fragment>
+  );
+};
+
+Product.propTypes = {
+  auth: PropTypes.object.isRequired,
+  product: PropTypes.object.isRequired,
+  getProduct: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+  product: state.product,
+});
+
+export default connect(mapStateToProps, { getProduct })(Product);
+
+points = [
+  {
+    item: 1,
+    price: 500,
+  },
+  {
+    item: 2,
+    price: 250,
+  },
+  {
+    item: 3,
+    price: 600,
+  },
+  {
+    item: 4,
+    price: 100,
+  },
+];

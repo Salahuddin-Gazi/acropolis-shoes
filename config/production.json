@@ -1,0 +1,5 @@
+{
+  "mongoURI": "mongodb+srv://onik:1234@acropolis-shoes.nexe3.mongodb.net/acropolisBackend?retryWrites=true&w=majority",
+  "jwtSecrectKey": "onik7890",
+  "adminKey": "1234"
+}

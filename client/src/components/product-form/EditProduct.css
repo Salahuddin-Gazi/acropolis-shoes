@@ -1,0 +1,33 @@
+.descImages {
+  position: relative;
+  /* height: 160px; */
+  /* width: 160px; */
+}
+
+.descOverlay {
+  position: absolute;
+  top: 8%;
+  left: 78%;
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  opacity: 0;
+  transition: 0.3s ease;
+  background-color: rgb(0, 0, 0);
+  color: azure;
+  overflow: hidden;
+  text-align: center;
+}
+
+.descOverlay .descIcon {
+  font-size: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+}
+
+.descImages:hover .descOverlay {
+  opacity: 0.7;
+}

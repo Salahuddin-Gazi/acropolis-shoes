@@ -1,0 +1,55 @@
+.profileAvatarConatiner {
+  position: relative;
+  width: 100%;
+  max-width: 180px;
+}
+
+/* .profileAvatar {
+  display: block;
+  width: 100%;
+  height: auto;
+} */
+
+.overlay {
+  position: absolute;
+  top: 70%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30%;
+  width: 100%;
+  opacity: 0;
+  transition: 0.3s ease;
+  background-color: rgb(243, 147, 130);
+  overflow: hidden;
+}
+
+.overlay input {
+  /* visibility: hidden; */
+  position: absolute;
+  font-size: 50px;
+  top: 50%;
+  left: 50%;
+  /* right: 50%; */
+  /* width: 50%;
+  height: 50%; */
+}
+
+.profileAvatarConatiner:hover .overlay {
+  opacity: 0.7;
+}
+
+.icon {
+  color: rgb(27, 23, 23);
+  font-size: 50px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.fa-camera:hover {
+  color: #eee;
+}

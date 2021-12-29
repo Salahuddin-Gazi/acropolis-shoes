@@ -1,0 +1,130 @@
+{
+  /* <div>
+        {admin && admin._id && (
+          <p className="py-2 text-white">
+            Edit this product, *admin privilages only{"  "}
+            <Link to={`/editproduct/${product._id}`} className="text-decoration-none">
+              <i className="fas fa-arrow-circle-right"></i> Edit The Product of :- {product.itemName}
+            </Link>
+          </p>
+        )}
+        <p className="py-2 text-white">
+          Back to products{"  "}
+          <Link to="/" className="text-decoration-none">
+            <i className="fas fa-arrow-circle-left"></i> Products
+          </Link>
+        </p>
+        <div className="row description-1 py-2">
+          <div className="col-md-6 card-1">
+            <img
+              className="card-img embed-responsive-item cursor-pointer"
+              src={product.itemImages.mainImage}
+              alt="Preview"
+              onClick={(e) => toggleImageModal(e)}
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+            />
+            <div className="embed-responsive-item d-flex card-img2">
+              {product.itemImages.descriptionImages.length > 0 &&
+                product.itemImages.descriptionImages.map((desImage, index) => (
+                  <img
+                    src={desImage}
+                    alt="Preview"
+                    key={index}
+                    className="mx-2 my-2 p-2 cursor-pointer"
+                    width="100px"
+                    height="100px"
+                    onClick={(e) => toggleImageModal(e)}
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModal"
+                    //   onMouseOver={() => (style.color = "#0F0")}
+                  />
+                ))}
+            </div>
+          </div>
+          <div className="col-md-6 card-2">
+            {" "}
+            <div className="card-body">
+              <h5 className="card-title mb-3">{product.itemName}</h5>
+              {product.itemBrand === "" && product.itemBrand === "Unknown" ? (
+                <h6 className="card-subtitle mb-2 text-muted text-danger">Brand Unknown</h6>
+              ) : (
+                <h6 className="card-subtitle mb-2 text-muted">Brand {product.itemBrand}</h6>
+              )}
+              <p className="card-text text-muted">{product.itemDescription}</p>
+            </div>
+            <ul className="list-group list-group-flush card-text">
+              <li className="list-group-item">
+                <div className="form-group">
+                  <select
+                    name="color"
+                    value={color}
+                    className={`form-control select-color fw-bold color-${color.toLowerCase()}`}
+                    onChange={(e) => cartStateChang(e)}
+                  >
+                    <option value="">Select Available Color</option>
+                    {product.itemColors &&
+                      product.itemColors.map((color, index) => (
+                        <option value={color} key={index}>
+                          {color.toUpperCase()}
+                        </option>
+                      ))}
+                  </select>
+                  <small className="form-text">* Please select a color before place order.</small>
+                </div>
+              </li>
+              <li className="list-group-item">
+                Price <span className="itemPrice">${product.itemPrice}</span>
+              </li>
+              <li className="list-group-item">
+                Product Status{" "}
+                {product.status && product.status === "Upcoming" && (
+                  <span className="text-primary text-italic">
+                    <i className="fas fa-dot-circle"></i> Upcoming
+                  </span>
+                )}
+                {product.status && product.status === "Available" && (
+                  <span className="text-success text-italic">
+                    <i className="fas fa-dot-circle"></i> In Stock
+                  </span>
+                )}
+                {product.status && product.status !== "Upcoming" && product.status !== "Available" && (
+                  <span className="text-danger text-italic">
+                    <i className="fas fa-dot-circle"></i> Out of Stock
+                  </span>
+                )}
+              </li>
+              {/*  */
+}
+<li className="list-group-item">
+  {products.filter((cart) => cart._id === prd_id).length > 0 ? (
+    <div className="text-danger fs-2">Product already in cart, Please update or delete from cart</div>
+  ) : (
+    <div className="col-md-6 my-3">
+      Add Quantity
+      <br />
+      <div className="input-group mb-3">
+        <button
+          className="btn btn-outline-success icon-button"
+          type="button"
+          onClick={(e) => quantity < product.itemQuantity && setCartState({ ...cartState, quantity: cartState.quantity + 1 })}
+        >
+          <i className="fas fa-plus"></i>
+        </button>
+        <input type="number" className="form-control text-center" name="quantity" value={quantity} disabled />
+        <button
+          className="btn btn-outline-danger icon-button"
+          type="button"
+          onClick={(e) => quantity > 1 && setCartState({ ...cartState, quantity: cartState.quantity - 1 })}
+        >
+          <i className="fas fa-minus"></i>
+        </button>
+      </div>
+    </div>
+  )}
+</li>;
+//           {/*  */}
+//         </ul>
+//       </div>
+//     </div>
+//   </div>
